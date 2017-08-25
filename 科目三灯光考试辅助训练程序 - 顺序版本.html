@@ -1,0 +1,222 @@
+<html>
+<head>
+	<title>科目三灯光考试辅助训练程序 - 顺序版本</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style type="text/css">
+
+body {
+	font-size:36px;
+}
+
+.button {
+	font-size:36px;
+}
+
+div {
+	margin:20px 20px 20px;
+}
+
+</style>
+
+</head>
+<body>
+	<div style="text-align:center">
+		<h2>科目三灯光考试辅助训练程序</br>顺序版本</h2>
+	</div>
+	
+	<div>
+		考官口令:<label id="examinerPwd"></label>
+	</div>
+	
+	<div>
+		操&nbsp;&nbsp;&nbsp;&nbsp;作:<input name="operation" type="radio" value="1" onclick="setRadio('1');" />近光灯
+			  <input name="operation" type="radio" value="2" onclick="setRadio('2');" />远光灯
+			  <input name="operation" type="radio" value="3" onclick="setRadio('3');" />交替使用远近光灯
+			  <input name="operation" type="radio" value="4" onclick="setRadio('4');" />开示廓灯开警示灯
+	</div>
+	
+	<div>
+		结&nbsp;&nbsp;&nbsp;&nbsp;果:<label id="result"></label>
+	</div>
+	
+	<div>
+		<input type="button" id="btn_sure" class="button" value="确认" onclick="checkResult();" />&nbsp;&nbsp;
+		<input type="button" id="btn_next" class="button" value="下一题" onclick="nextSubject();" />
+	</div>
+	
+	<div>
+		正&nbsp;确&nbsp;率:<label id="correct_rate">0</label><label>%，
+		其中，答题总数：<label><label id="finishCnt">0</label><label>道，正确答题</label>
+		<label id="correctCnt">0</label><label>道。</label>
+	</div>
+	
+	<div>
+		题目覆盖率:<label id="coverage_rate">0</label><label>%，
+		其中，题目总数：11道，已答对<label><label id="sureCnt">0</label><label>道。</label>
+	</div>
+</body>
+
+
+
+<script type="text/javascript">
+
+var pwdAndOperation;
+var finishCnt = 0;
+var correctCnt = 0;
+var sureCnt = 0;
+var totalCnt = 11;
+
+init();
+
+//初始化数据
+function init(){
+	pwdAndOperation = new Array();
+	var data = new Object();
+	data.examinerPwd="XXX学员，现在开始进行模拟夜间灯光使用考试，请模拟车辆夜间起步前的灯光使用。";
+	data.operation="近光灯";
+	data.btnValue=1;
+	pwdAndOperation[0] = data;
+	
+	data = new Object();
+	data.examinerPwd="现在进入无照明、照明不良道路行驶，请按规定开启灯光。";
+	data.operation="远光灯";
+	data.btnValue=2;
+	pwdAndOperation[1] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方近距离跟车，请正确使用灯光。";
+	data.operation="近光灯";
+	data.btnValue=1;
+	pwdAndOperation[2] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方道路恢复照明，请正确使用灯光。";
+	data.operation="近光灯";
+	data.btnValue=1;
+	pwdAndOperation[3] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方遇车辆会车，请正确使用灯光。";
+	data.operation="近光灯";
+	data.btnValue=1;
+	pwdAndOperation[4] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方通过路口，请正确使用灯光。";
+	data.operation="近光灯";
+	data.btnValue=1;
+	pwdAndOperation[5] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方遇没有交通信号灯控制路口，请正确使用灯光。";
+	data.operation="交替使用远近光灯";
+	data.btnValue=3;
+	pwdAndOperation[6] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方学校，请正确使用灯光。";
+	data.operation="交替使用远近光灯";
+	data.btnValue=3;
+	pwdAndOperation[7] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方超车，请正确使用灯光。";
+	data.operation="交替使用远近光灯";
+	data.btnValue=3;
+	pwdAndOperation[8] = data;
+	
+	data = new Object();
+	data.examinerPwd="前方人行横道，请正确使用灯光。";
+	data.operation="交替使用远近光灯";
+	data.btnValue=3;
+	pwdAndOperation[9] = data;
+	
+	data = new Object();
+	data.examinerPwd="请模拟夜间，车辆路边临时停车，请正确使用灯光。";
+	data.operation="开示廓灯开警示灯";
+	data.btnValue=4;
+	pwdAndOperation[10] = data;
+	
+	nextSubject();
+}
+
+
+var temp;
+
+//下一题
+function nextSubject(){
+	if (finishCnt < totalCnt){
+		var num = finishCnt;
+		var data = pwdAndOperation[num];
+		temp = data;
+		var examinerPwd = data.examinerPwd;
+		document.getElementById("examinerPwd").innerText = examinerPwd;
+		resetOperation();
+	}
+}
+
+//清空操作的选择结果
+function resetOperation(){
+	var operations = document.getElementsByName("operation");
+	for (var i = 0; i < operations.length; i++){
+		operations[i].checked=false;
+		radioValue = 0;
+	}
+}
+
+//获取设置的radio的值
+var radioValue = 0;
+function setRadio(value){
+	radioValue = value;
+}
+
+//判断答题结果
+function checkResult(){
+	if (radioValue == 0){
+		alert("您还未答题，请选择对应的灯光操作！");
+		return;
+	} else {
+		finishCnt++;
+		var btnValue = temp.btnValue;
+		if (radioValue == btnValue){
+			correctCnt++;
+			sureCnt++;
+			document.getElementById("result").innerText = "正确";
+		} else {
+			document.getElementById("result").innerText = "错误";
+		}
+		calCorrectRateAndSet();
+		calCoverageRateAndSet();
+		//nextSubject();
+	}
+}
+
+//计算正确率并显示
+function calCorrectRateAndSet(){
+	var correctRate = correctCnt / finishCnt * 100;
+	correctRate = toDecimal(correctRate);
+	document.getElementById("correct_rate").innerText = correctRate;
+	document.getElementById("finishCnt").innerText = finishCnt;
+	document.getElementById("correctCnt").innerText = correctCnt;
+}
+
+//计算覆盖率并显示
+var sureList = new Array();
+function calCoverageRateAndSet(){
+	var coverageRate = sureCnt / totalCnt * 100;
+	coverageRate = toDecimal(coverageRate);
+	document.getElementById("coverage_rate").innerText = coverageRate;
+	document.getElementById("sureCnt").innerText = sureCnt;
+}
+
+//保留两位小数
+function toDecimal(x) {
+	var f = parseFloat(x);
+	if (isNaN(f)) {
+		return;
+	}
+	f = Math.round(x*100)/100; 
+	return f;
+}
+</script>
+</html>
